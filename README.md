@@ -8,26 +8,38 @@ Ruby is the programming language I chose to use for our api. I'm currently using
 To install ruby, I recommend using RVM, or ruby version manager. It makes updating, changing versions, and reinstalling super easily. RVM, however, is a pain to setup on windows machines (or it was the last time I had to do it).
 
 ---------------------------------------
+
 Install instructions can be found [HERE](https://rvm.io/rvm/install "RVM install guide")
 
-`note: The last time I installed rvm was a LONG time ago, these are just guides that looked promising - I have not personally followed through any of them`
+`note: The last time I installed rvm was a LONG time ago, these are just guides that looked promising - I have not personally followed through this in a long time`
+
+
 ---------------------------------------
 After installing RVM
 - restart your terminal
 - enter the following commands:
-```rvm install 2.3.5
-rvm --default use 2.3.5```
+
+``` 
+rvm install 2.3.5
+rvm --default use 2.3.5 
+```
 - Verify you are actually using the right version with
-```ruby --version```
+```
+ruby --version
+```
 - Now we will install 'Bundler' a very useful gem for managing dependencies
-```gem install bundler```
+```
+gem install bundler
+```
 - And now you should be able to install all of the dependencies for this application
-```bundle install```
+```
+bundle install
+```
 
 ## Running the app
 Now that you have the setup out of the way, you should be able to run the command below to start up your application server
 
-```rackup```
+`rackup`
 
 If you haven't gotten any errors in the command line, you should be able to go to your browser and navigate to: `http://localhost:9292/api/hello_world` and see a hello world response!
 
