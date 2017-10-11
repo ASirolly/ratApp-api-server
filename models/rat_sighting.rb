@@ -3,17 +3,14 @@ class RatSighting
 	include Mongoid::Timestamps
 
 	# Fields
-	field :sighting_type
+	field :location_type
+	field :ny_uid
 	# Relations
-	embedded_in :user
+	embedded_in :user, validate: false
 	embeds_one :location, as: :locatable, validate: true
 
 	# Scoping and indexing
 	scope :ordered, -> {order('created_at DESC')}
-
-	#validations
-	validates :slug, presence: true, uniqueness: true
-
 
   #This is a weird ruby idiom used to define class methods. It's kind of a short cut, but if you're interested ask me about it sometime
 	class << self

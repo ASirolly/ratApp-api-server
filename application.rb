@@ -6,8 +6,10 @@ require 'pry'
 Dir["#{File.dirname(__FILE__)}/models/**/*.rb"].each { |f| require f }
 Dir["#{File.dirname(__FILE__)}/api/**/*.rb"].each { |f| require f }
 Dir["#{File.dirname(__FILE__)}/config/**/*.rb"].each {|f| require f}
-
+puts ENV['env_name']
+binding.pry
 Mongoid.load! "config/mongoid.config"
+
 # Wrapping the api in a module for organizational reasons
 # Grape API class. Grape is the framework we are using.
 module API
@@ -26,7 +28,7 @@ module API
   end
 end
 ## Below is a commented out way to get stop the application and open a command line tool called pry right in the application environment
-binding.pry
+#binding.pry
 
 # packing it all up into a single object
 RatAppServer = Rack::Builder.new {

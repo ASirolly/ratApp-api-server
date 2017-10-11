@@ -4,14 +4,16 @@ class Location
 	# Fields
 	field :longitude, type: Float
 	field :latitude, type: Float
+	field :address, type: String
+	field :zip, type: String # Storage space is cheap, reworking the database because of wierd zipcode rules in other countries is expensive
 
 	# Relations
 	embedded_in :locable, polymorphic: true
-
+	embedded_in :borough, validate: false
+	embedded_in :city, validate: false
 	# Scoping and indexing
 	scope :ordered, -> {order('created_at DESC')}
 
 	#validations
-	validates :slug, presence: true, uniqueness: true
 	validates :longitude, :latitude, presence: true
 end

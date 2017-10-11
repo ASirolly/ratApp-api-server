@@ -27,3 +27,5 @@ Gemfile.lock
 doc
 /.bundle
 /.yardoc
+
+*.csv
