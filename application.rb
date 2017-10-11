@@ -1,9 +1,13 @@
 require 'grape'
-
+require 'mongoid'
+require 'pry'
 # Load files from the models and api folders
-Dir["#{File.dirname(__FILE__)}/app/models/**/*.rb"].each { |f| require f }
-Dir["#{File.dirname(__FILE__)}/app/api/**/*.rb"].each { |f| require f }
 
+Dir["#{File.dirname(__FILE__)}/models/**/*.rb"].each { |f| require f }
+Dir["#{File.dirname(__FILE__)}/api/**/*.rb"].each { |f| require f }
+Dir["#{File.dirname(__FILE__)}/config/**/*.rb"].each {|f| require f}
+
+Mongoid.load! "config/mongoid.config"
 # Wrapping the api in a module for organizational reasons
 # Grape API class. Grape is the framework we are using.
 module API
@@ -17,8 +21,12 @@ module API
       { status: 'Hello World' }
     end
 
+	 	mount ::API::UsersController
+		mount ::API::RatSightingsController
   end
 end
+## Below is a commented out way to get stop the application and open a command line tool called pry right in the application environment
+binding.pry
 
 # packing it all up into a single object
 RatAppServer = Rack::Builder.new {
