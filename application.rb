@@ -7,7 +7,7 @@ Dir["#{File.dirname(__FILE__)}/models/**/*.rb"].each { |f| require f }
 Dir["#{File.dirname(__FILE__)}/api/**/*.rb"].each { |f| require f }
 Dir["#{File.dirname(__FILE__)}/config/**/*.rb"].each {|f| require f}
 puts ENV['env_name']
-binding.pry
+#binding.pry
 Mongoid.load! "config/mongoid.config"
 
 # Wrapping the api in a module for organizational reasons
