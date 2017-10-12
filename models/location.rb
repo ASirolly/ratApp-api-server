@@ -8,12 +8,10 @@ class Location
 	field :zip, type: String # Storage space is cheap, reworking the database because of wierd zipcode rules in other countries is expensive
 
 	# Relations
-	embedded_in :locable, polymorphic: true
-	embedded_in :borough, validate: false
-	embedded_in :city, validate: false
+	belongs_to :rat_sighting
+	belongs_to :borough, validate: false
+	belongs_to :city, validate: false
 	# Scoping and indexing
 	scope :ordered, -> {order('created_at DESC')}
 
-	#validations
-	validates :longitude, :latitude, presence: true
 end

@@ -7,6 +7,8 @@ module API
 				use page: 1, per_page: 25
 			end
 			get do
+				params[:page] ||= 1
+				params[:per_page] ||= 25
 				@rat_sightings = RatSighting.paginate(:page => params[:page] - 1,
 															:limit => params[:per_page]).desc(:_id)
 			end

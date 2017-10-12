@@ -6,8 +6,8 @@ class RatSighting
 	field :location_type
 	field :ny_uid
 	# Relations
-	embedded_in :user, validate: false
-	embeds_one :location, as: :locatable, validate: true
+	belongs_to :user, validate: false
+	has_one :location
 
 	# Scoping and indexing
 	scope :ordered, -> {order('created_at DESC')}

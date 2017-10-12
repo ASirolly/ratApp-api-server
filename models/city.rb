@@ -4,7 +4,7 @@ class City
 	before_save :normalize_name
 	#fields
 	field :name, type: String
-	embeds_many :location
+	has_many :location
 	
 	validates :name, presence: true, uniqueness: true
 
