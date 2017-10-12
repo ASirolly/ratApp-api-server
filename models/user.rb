@@ -16,7 +16,6 @@ class User
 	field :admin, type: Boolean
 
 	has_many :rat_sighting, validate: false
-	validates :slug, presence: true, uniqueness: true
 	validates_confirmation_of :password
 	# Fancy trick for class methods, ask me if you want more info
 	class << self

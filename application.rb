@@ -10,6 +10,7 @@ puts ENV['env_name']
 #binding.pry
 Mongoid.load! "config/mongoid.config"
 
+binding.pry
 # Wrapping the api in a module for organizational reasons
 # Grape API class. Grape is the framework we are using.
 module API

@@ -12,6 +12,22 @@ Dir["#{File.dirname(__FILE__)}/../config/**/*.rb"].each {|f| require f}
 Mongoid.load! "../config/mongoid.config"
 headers = []
 
+
+=> ["_id",
+ "created_at",
+ "updated_at",
+ "email",
+ "salt",
+ "first_name",
+ "last_name",
+ "password_digest",
+ "admin"]
+
+if User.all.length == 0
+	User.create(email: "ratapp.admin@testing.co",
+						  first_name: "admin", password: "password", admin: true)
+end
+
 def store(data = {})
 	loc_data = {longitude: data[:longitude], latitude: data[:latitude],
 								address: data[:incident_address], zip: data[:incident_zip]}
