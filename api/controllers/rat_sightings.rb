@@ -11,6 +11,7 @@ module API
 				params[:per_page] ||= 25
 				@rat_sightings = RatSighting.paginate(:page => params[:page].to_i - 1,
 															:limit => params[:per_page].to_i).desc(:_id)
+				@rat_sightings.as_json(methods: [:location])
 			end
 		end
 

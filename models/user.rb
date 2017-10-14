@@ -17,6 +17,7 @@ class User
 
 	has_many :rat_sighting, validate: false
 	validates_confirmation_of :password
+
 	# Fancy trick for class methods, ask me if you want more info
 	class << self
 		def find_by_email(email)

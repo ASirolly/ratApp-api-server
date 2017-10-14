@@ -13,16 +13,6 @@ Mongoid.load! "../config/mongoid.config"
 headers = []
 
 
-=> ["_id",
- "created_at",
- "updated_at",
- "email",
- "salt",
- "first_name",
- "last_name",
- "password_digest",
- "admin"]
-
 if User.all.length == 0
 	User.create(email: "ratapp.admin@testing.co",
 						  first_name: "admin", password: "password", admin: true)
@@ -60,7 +50,7 @@ CSV.open('./Rat_Sightings.csv', 'r') do |csv|
 
 	#read the actual data
 	#csv.readlines[30583..-1].each do |row|
-	csv.readlines[1..-1].each do |row|
+	csv.readlines[200..-1].each do |row|
 		#some fancy ass lambda stuff
 		data = row.each_with_object({}).with_index do |(value, hash), index| 
 			hash[headers[index]] = value

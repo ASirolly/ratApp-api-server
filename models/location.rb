@@ -6,7 +6,7 @@ class Location
 	field :latitude, type: Float
 	field :address, type: String
 	field :zip, type: String # Storage space is cheap, reworking the database because of wierd zipcode rules in other countries is expensive
-
+	
 	# Relations
 	belongs_to :rat_sighting
 	belongs_to :borough, validate: false
