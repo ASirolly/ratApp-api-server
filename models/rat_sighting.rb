@@ -13,6 +13,7 @@ class RatSighting
 	scope :ordered, -> {order('created_at DESC')}
 
   #This is a weird ruby idiom used to define class methods. It's kind of a short cut, but if you're interested ask me about it sometime
+
 	class << self
 		def paginate(opts = {})
 			limit = (opts[:per_page] || 25).to_i
