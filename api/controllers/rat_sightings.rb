@@ -11,7 +11,36 @@ module API
 				params[:per_page] ||= 25
 				@rat_sightings = RatSighting.paginate(:page => params[:page].to_i - 1,
 															:limit => params[:per_page].to_i).desc(:_id)
-				@rat_sightings.as_json({without: :location_id, :include => { :location => { :include => [:borough, :city], without:  :city_id } } })
+
+				@rat_sightings.as_json({without: :location_id, :include => { :location => { :include => [:borough, :city], without:  :city_id }}})
+			end
+
+
+			desc "Creates a new Rat Sighting"
+			params do
+				requires :token, :longitude, :latitude, :city, :location_type, :borough, :address, :zip
+			end
+			post do
+				city = City.find_or_create_by(name: params[:city])
+				borough = Borough.find_or_create_by(name: params[:borough])
+				location = Location.new(longitude: params[:longitude],
+																latitude: params[:latitude],
+																address: params[:address], zip: params[:zip],
+																city: city, borough: borough)
+
+				sighting = RatSighting.new(location_type: params[:location_type],
+															location: location, user: current_user)
+
+				puts sighting.valid?
+				if sighting.valid? && location.valid?
+					sighting.save!
+					location.save!
+					city.save!
+					borough.save!
+					sighting
+				else
+					error!("Error Saving Sighting - make sure the parameters are correct", 422)
+				end
 			end
 		end
 

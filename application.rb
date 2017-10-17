@@ -6,20 +6,53 @@ require 'pry'
 Dir["#{File.dirname(__FILE__)}/models/**/*.rb"].each { |f| require f }
 Dir["#{File.dirname(__FILE__)}/api/**/*.rb"].each { |f| require f }
 Dir["#{File.dirname(__FILE__)}/config/**/*.rb"].each {|f| require f}
+Dir["#{File.dirname(__FILE__)}/lib/**/*.rb"].each {|f| require f}
+
 puts ENV['env_name']
 #binding.pry
 Mongoid.load! "config/mongoid.config"
-
+binding.pry
 # Wrapping the api in a module for organizational reasons
 # Grape API class. Grape is the framework we are using.
 module API
   class Root < Grape::API
-		#note these options
-    format :json
-    prefix :api
+  	content_type :json, 'application/json; charset=UTF-8'
+		format :json
+  	prefix :api
+		
+		attr_reader :current_user
 
-    # Hello world endpoint
+	  before do
+      header['Access-Control-Allow-Origin'] = '*'
+      header['Access-Control-Request-Method'] = '*'
+    end
+
+		helpers do
+			def authenticate!
+				error!('Unauthorized. Invalid or expired token.', 401) unless current_user
+			end
+
+			def current_user
+				@current_user ||= User.find(decoded_auth_token[:user_id]) if decoded_auth_token
+			end
+
+			def decoded_auth_token
+				@decoded_auth_token ||= JsonWebToken.decode(http_auth_header)
+			end
+		
+			def http_auth_header
+				if request.headers['Authorization'].present?
+				 	return request.headers['Authorization'].split(' ').last
+				else 
+					error!("No token found - make sure your auth token is in the header 'Authorization'", 401)
+				end 
+				nil
+			end
+		end
+
+		# Hello world endpoint
     get :hello_world do
+			authenticate!
       { status: 'Hello World' }
     end
 
@@ -27,6 +60,7 @@ module API
 		mount ::API::RatSightingsController
   end
 end
+
 ## Below is a commented out way to get stop the application and open a command line tool called pry right in the application environment
 #binding.pry
 

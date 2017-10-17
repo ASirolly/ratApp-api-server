@@ -1,11 +1,12 @@
-require 'bcrypt'
+require 'BCrypt'
+include BCrypt
 require 'SecureRandom'
 
 class User
 	include Mongoid::Document
 	include Mongoid::Timestamps
 	include BCrypt
-	before_save :generate_salt, :encrypt_password
+	before_create :encrypt_password
 	attr_accessor :password, :password_confirmation
 	# define all of the fields we will be saving into mongodb
 	field :email, type: String
@@ -16,33 +17,33 @@ class User
 	field :admin, type: Boolean
 
 	has_many :rat_sighting, validate: false
+	has_one :token
 	validates_confirmation_of :password
+	validates :password, presence: true
 
-	# Fancy trick for class methods, ask me if you want more info
-	class << self
+	class << self # Class methods
 		def find_by_email(email)
 			first(conditions: {email: email})
 		end
 
 		def authenticate(email, password)
-			# I'm just forwarding the call right here, but I will probably have to do something more fancy soon
-			password_correct(email, password)
+			user = User.find_by(email: email)
+			if password_correct?(email, password)
+				JsonWebToken.encode(user_id: user.id)
+			end
 		end
 
 		def password_correct?(email, password)
-			user = User.find_by_email(email)
+			user = User.find_by(email: email)
 			return if user.nil?
-			user_pass = Password.new(user.password_digest)
-			(@password + user.salt) == user_pass
+			BCrypt::Engine.hash_secret(password, user.salt) == user.password_digest
 		end
 	end
 
 	protected
-	def generate_salt
-		self.salt = SecureRandom.urlsafe_base64
-	end
 	def encrypt_password
-		salted_password = @password + salt
-		self.password_digest = Password.create(password: salted_password)
+		puts "Happening"
+		self.salt = BCrypt::Engine.generate_salt
+		self.password_digest = BCrypt::Engine.hash_secret(password, salt)
 	end
 end

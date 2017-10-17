@@ -16,6 +16,22 @@ module API
 				User.create!(user_params)
 			end
 		end
+
+		desc 'validates credentials and returns an auth token'
+		params do
+			requires :email, type: String
+			requires :password, type: String
+		end
+
+		post :login do
+			token = User.authenticate(params[:email], params[:password])
+			unless token.nil?
+				{ auth_token: token }
+			else
+				halt 401
+			end
+		end
+		
 		# Cleans up parameter list that we will end up reusing
 		def user_params
 			{ first_name: params[:first_name],
