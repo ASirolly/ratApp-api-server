@@ -29,15 +29,14 @@ module API
 																city: city, borough: borough)
 
 				sighting = RatSighting.new(location_type: params[:location_type],
-															location: location, user: current_user)
+															location: location, user: User.first)
 
-				puts sighting.valid?
 				if sighting.valid? && location.valid?
 					sighting.save!
 					location.save!
 					city.save!
 					borough.save!
-					sighting
+					sighting.as_json({without: :location_id, :include => { :location => { :include => [:borough, :city], without:  :city_id }}})
 				else
 					error!("Error Saving Sighting - make sure the parameters are correct", 422)
 				end

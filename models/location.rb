@@ -13,9 +13,6 @@ class Location
 	belongs_to :city, validate: false
 	# Scoping and indexing
 	scope :ordered, -> {order('created_at DESC')}
-	
-	def as_json(args = {})
-		args.merge({include: [:city, :borough]}, without: [:city_id, :borough_id])
-		super(args)
-	end
+
+
 end

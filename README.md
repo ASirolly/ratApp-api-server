@@ -122,3 +122,23 @@ They should be in  a flat structure:
 	zip: 
 }
 ```
+## Locations
+- Get Locations
+Get request `localhost:9292/api/locations`
+
+optional parameters: 
+		`start = Date one week ago`
+		`end = Date tomorrow`
+
+They should be in  a flat structure:
+```
+{
+	longitude: ,
+	latitude: ,
+	city: , 
+	location_type: ,
+	borough: ,
+	address: , 
+	zip: 
+}
+```
