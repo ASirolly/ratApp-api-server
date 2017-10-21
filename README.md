@@ -60,4 +60,65 @@ I would recommend reading up on this stuff on your own, as I am fallable and par
 5. The client (android) recieves the response
 
 
-for more detail about rack applications, check out [this article](https://www.rubyraptor.org/how-we-made-raptor-up-to-4x-faster-than-unicorn-and-up-to-2x-faster-than-puma-torquebox/).
+for more detail about rack applications, check out [this article](https://www.rubyraptor.org/how-we-made-raptor-up-to-4x-faster-than-unicorn-and-up-to-2x-faster-than-puma-torquebox/)
+
+# API Reference
+## Users
+- Creating a User
+
+
+POST data to: `localhost:9292/api/users`
+The first endpoint you should know is for creating a user- This api endpoint takes an email, a password and an email confirmation.
+
+This should be in the form:
+```
+{
+	email: "some.fake-email@example.com",
+	password: "passwordhere",
+	password_confirmation: "passwordhere"
+}
+
+```
+This will return an error if the parameters aren't valid, or the user itself if it is
+
+
+- Loggging in
+
+POST data to `localhost:9292/api/login`
+
+make sure to pass a valid email and password:
+```
+{
+	email: "vaild-email",
+	password: "password"
+}
+```
+
+And this will return an auth token. Put this auth token in the Header of your requests (in the `Authorization` field) and you will be able to make requests to protected endpoints
+
+## RatSightings
+- Getting sightings (paginated)
+GET request to `localhost:9292/api/rat_sightings`
+
+optional parameters include: page = (1) and per_page = (25)
+
+All sightings will be ordered from newest to oldest and you will be returned `per-page` records
+offset by (page - 1 * per_page) records
+
+- Create a rat sighting
+POST 
+Data required to be in a flat structure. The necessary fields are:
+`token, longitude, latitude, city, location_type, borough, address, zip`
+
+They should be in  a flat structure:
+```
+{
+	longitude: ,
+	latitude: ,
+	city: , 
+	location_type: ,
+	borough: ,
+	address: , 
+	zip: 
+}
+```

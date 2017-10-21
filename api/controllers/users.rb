@@ -13,7 +13,8 @@ module API
 				requires :password_confirmation, type: String
 			end
 			post do
-				User.create!(user_params)
+				User.create!(email: params['email'], password: params['password'],
+										 password_confirmation: params['password_confirmation'])
 			end
 		end
 

@@ -18,7 +18,7 @@ module API
 
 			desc "Creates a new Rat Sighting"
 			params do
-				requires :token, :longitude, :latitude, :city, :location_type, :borough, :address, :zip
+				requires :longitude, :latitude, :city, :location_type, :borough, :address, :zip
 			end
 			post do
 				city = City.find_or_create_by(name: params[:city])
