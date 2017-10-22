@@ -1,4 +1,4 @@
-require 'Date'
+require 'date'
 require "active_support/core_ext/integer/time" #dope ass library that allows the 1.day syntax
 
 module API

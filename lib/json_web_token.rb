@@ -1,4 +1,4 @@
-require 'JWT'
+require 'jwt'
 
 class JsonWebToken
 	class << self

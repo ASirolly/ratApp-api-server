@@ -1,7 +1,7 @@
 require 'grape'
 require 'mongoid'
 require 'pry'
-require 'CSV'
+require 'csv'
 
 ENV["MONGOID_ENV"] = "development"
 

@@ -1,6 +1,6 @@
-require 'BCrypt'
+require 'bcrypt'
 include BCrypt
-require 'SecureRandom'
+require 'securerandom'
 
 class User
 	include Mongoid::Document
