@@ -13,7 +13,11 @@ module API
 			end
 
 			get do
-				@locations = Location.where(:created_at.gt => params[:start_date].to_datetime).where(																					 :created_at.lte => params[:end_date].to_datetime)
+				if (params[:start_date] > params[:end_date])
+					error 400, "Don't let your start date be after your end_date dummy - no records will ever get returned"
+				else 
+					@locations = Location.where(:created_at.gt => params[:start_date].to_datetime).where(																					 :created_at.lte => params[:end_date].to_datetime)
+				end
 			end
 		end
 	end

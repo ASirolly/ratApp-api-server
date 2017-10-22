@@ -127,8 +127,8 @@ They should be in  a flat structure:
 Get request `localhost:9292/api/locations`
 
 optional parameters: 
-		`start = Date one week ago`
-		`end = Date tomorrow`
+		`start_date = Date one week ago`
+		`end_date = Date tomorrow`
 
 They should be in  a flat structure:
 ```

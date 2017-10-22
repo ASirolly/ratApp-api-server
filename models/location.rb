@@ -13,6 +13,4 @@ class Location
 	belongs_to :city, validate: false
 	# Scoping and indexing
 	scope :ordered, -> {order('created_at DESC')}
-
-
 end
