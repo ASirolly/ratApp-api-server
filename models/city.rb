@@ -4,12 +4,11 @@ class City
 	before_save :normalize_name
 	#fields
 	field :name, type: String
-	has_many :location
-	
+	has_many :location, validate: false
 	validates :name, presence: true, uniqueness: true
 
 	protected
 	def normalize_name
-		self.name = name.downcase!
+		self.name = name.downcase
 	end
 end

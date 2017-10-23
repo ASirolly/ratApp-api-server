@@ -21,7 +21,7 @@ module API
 				requires :longitude, :latitude, :city, :location_type, :borough, :address, :zip
 			end
 			post do
-				city = City.find_or_create_by(name: params[:city])
+				city = City.where(name: params[:city]).first_or_create
 				borough = Borough.find_or_create_by(name: params[:borough])
 				location = Location.new(longitude: params[:longitude],
 																latitude: params[:latitude],
