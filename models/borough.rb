@@ -3,7 +3,6 @@ class Borough
 	include Mongoid::Timestamps
 	before_save :normalize_name
 	#fields
-	attr_accessor :name
 	field :name, type: String
 	has_many :location, validate: false
 
