@@ -22,7 +22,7 @@ module API
 			end
 			post do
 				city = City.where(name: params[:city]).first_or_create
-				borough = Borough.find_or_create_by(name: params[:borough])
+				borough = Borough.where(name: params[:borough]).first_or_create
 				location = Location.new(longitude: params[:longitude],
 																latitude: params[:latitude],
 																address: params[:address], zip: params[:zip],
