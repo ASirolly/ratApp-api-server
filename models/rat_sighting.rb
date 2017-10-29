@@ -17,10 +17,9 @@ class RatSighting
 	class << self
 		def paginate(opts = {})
 			limit = (opts[:per_page] || 25).to_i
-			page  = (opts[:page]  || 1).to_i
+			page  = (opts[:page]  || 0).to_i
 			
-			offset = 0
-			offset = (page - 1) * limit unless page < 1
+			offset = page * limit
 			per_page(limit).offset(offset)
 		end
 
