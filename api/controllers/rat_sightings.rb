@@ -10,7 +10,7 @@ module API
 				params[:page] ||= 1
 				params[:per_page] ||= 25
 				@rat_sightings = RatSighting.paginate(:page => params[:page].to_i,
-															:limit => params[:per_page].to_i).desc(:_id)
+															:per_page => params[:per_page].to_i).desc(:_id)
 
 				@rat_sightings.as_json({without: :location_id, :include => { :location => { :include => [:borough, :city], without:  :city_id }}})
 			end
