@@ -1,3 +1,6 @@
+require 'date'
+require "active_support/core_ext/integer/time"
+
 module API
 	class RatSightingsController < Grape::API
 
@@ -43,5 +46,29 @@ module API
 			end
 		end
 
+		resources :rat_sightings_by_date do
+			desc "Gets rat sightings between two date ranges"
+			params do
+				# optional :start_date, type: Date, default: Date.today - 7.days
+				# optional :end_date, type: Date, default: Date.today + 1.day
+				use limit: 25
+			end
+
+			get do
+				params[:limit] ||= 25
+
+				params[:start_date] = params[:start_date] ? Date.parse(params[:start_date], '%d/%m/%Y') : Date.today - 7.days
+				params[:end_date] = params[:end_date] ? Date.parse(params[:end_date], '%d/%m/%Y') : Date.today + 1.days
+
+				if (params[:start_date] > params[:end_date])
+					error 400, "Don't let your start date be after your end_date dummy - no records will ever get returned"
+				else
+					@rat_sightings = RatSighting.where(:created_at.gt => params[:start_date].to_datetime).where(
+						:created_at.lte => params[:end_date].to_datetime).limit(params[:limit])
+
+					@rat_sightings.as_json({without: :location_id, :include => { :location => { :include => [:borough, :city], without:  :city_id }}})
+				end
+			end
+		end
 	end
 end
