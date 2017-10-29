@@ -23,7 +23,9 @@ def store(data = {})
 								address: data[:incident_address], zip: data[:incident_zip]}
 	borough_info = {name: data[:borough]}
 	city_info = {name: data[:city]}
-	sighting_info = {ny_uid: data[:ny_uid], location_type: data[:location_type]}
+	sighting_info = {ny_uid: data[:unique_key], location_type: data[:location_type]}
+
+	sighting_info[:created_at] = Date.strptime(data[:created_date], "%m/%d/%Y %I:%M:%S %p")
 
 	loc_data[:borough] = Borough.find_or_create_by(borough_info)
 	loc_data[:city] = City.find_or_create_by(city_info)
@@ -43,7 +45,7 @@ end
 City.create(name: "brooklyn")
 puts "city created, no problem"
 
-CSV.open('./Rat_Sightings.csv', 'r') do |csv| 
+CSV.open('./rat_sightings.csv', 'r') do |csv|
 	#define headers and rewrite them in a way that is easy for our models to interact with
 	headers = csv.first
 	headers.map! {|header| (header.downcase.gsub(" ", "_")).to_sym unless header.nil? }
