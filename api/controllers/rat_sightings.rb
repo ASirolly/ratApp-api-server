@@ -14,8 +14,7 @@ module API
 				params[:per_page] ||= 25
 				@rat_sightings = RatSighting.paginate(:page => params[:page].to_i,
 															:per_page => params[:per_page].to_i).desc(:_id)
-
-				@rat_sightings.as_json({without: :location_id, :include => { :location => { :include => [:borough, :city], without:  :city_id }}})
+				@rat_sightings.as_json
 			end
 
 
@@ -39,7 +38,7 @@ module API
 					location.save!
 					city.save!
 					borough.save!
-					sighting.as_json({without: :location_id, :include => { :location => { :include => [:borough, :city], without:  :city_id }}})
+					sighting.as_json
 				else
 					error!("Error Saving Sighting - make sure the parameters are correct", 422)
 				end
@@ -49,8 +48,6 @@ module API
 		resources :rat_sightings_by_date do
 			desc "Gets rat sightings between two date ranges"
 			params do
-				# optional :start_date, type: Date, default: Date.today - 7.days
-				# optional :end_date, type: Date, default: Date.today + 1.day
 				use limit: 25
 			end
 
@@ -66,7 +63,7 @@ module API
 					@rat_sightings = RatSighting.where(:created_at.gt => params[:start_date].to_datetime).where(
 						:created_at.lte => params[:end_date].to_datetime).limit(params[:limit])
 
-					@rat_sightings.as_json({without: :location_id, :include => { :location => { :include => [:borough, :city], without:  :city_id }}})
+					@rat_sightings.as_json
 				end
 			end
 		end

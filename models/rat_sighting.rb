@@ -12,8 +12,19 @@ class RatSighting
 	# Scoping and indexing
 	scope :ordered, -> {order('created_at DESC')}
 
-  #This is a weird ruby idiom used to define class methods. It's kind of a short cut, but if you're interested ask me about it sometime
+	def as_json(options = nil)
+		options ||= {}
+		loc_options = { :include => [:borough, :city], without:  [:city_id, :borough_id, :rat_sighting_id]}
 
+		defaults = {without: :location_id, :include =>
+																		 { :location => loc_options}}
+		options = options.merge(defaults) unless options.include?(:truncated)
+		puts options
+		super(options)
+	end
+
+
+  #This is a weird ruby idiom used to define class methods. It's kind of a short cut, but if you're interested ask me about it sometime
 	class << self
 		def paginate(opts = {})
 			limit = (opts[:per_page] || 25).to_i
