@@ -47,12 +47,13 @@ module API
 
 			desc "Get sighting frequency per month between two dates"
 			params do
-				optional :start_date, default: (Date.today - 365).strftime("%d/%m/%y")
-				optional :end_date, default: Date.today.strftime("%d/%m/%y")
+				optional :start_date, default: (Date.today - 365).strftime("%d/%m/%Y")
+				optional :end_date, default: Date.today.strftime("%d/%m/%Y")
 			end
 			get :frequency do
-				start_date = Date.strptime(params[:start_date], "%d/%m/%y")
-			  end_date = Date.strptime(params[:end_date], "%d/%m/%y")
+				start_date = Date.strptime(params[:start_date], "%d/%m/%Y")
+			  end_date = Date.strptime(params[:end_date], "%d/%m/%Y")
+				puts "start: #{start_date.strftime("%m %d, %y")}, end: #{end_date.strftime("%m %d, %y")}"
 				aggregation = Queries::frequency_between_dates(start_date, end_date)
 				sightings_per_month = RatSighting.collection.aggregate(aggregation).to_a
 				return {data: sightings_per_month}.to_json
@@ -64,13 +65,13 @@ module API
 		params do
 			optional :limit, default: 25
 			# Default date range is past 30 days
-			optional :start_date, default: (Date.today - 30).strftime
-			optional :end_date, default: Date.today.strftime
+			optional :start_date, default: (Date.today - 30).strftime("%d/%m/%Y")
+			optional :end_date, default: Date.today.strftime("%d/%m/%Y")
 		end
 		get :rat_sightings_by_date do
 			limit			 = params[:limit]
-			start_date = Date.strptime(params[:start_date], "%d/%m/%y").to_datetime
-			end_date	 = Date.strptime(params[:end_date], "%d/%m/%y").to_datetime
+			start_date = Date.strptime(params[:start_date], "%d/%m/%Y").to_datetime
+			end_date	 = Date.strptime(params[:end_date], "%d/%m/%Y").to_datetime
 			if (params[:start_date] > params[:end_date])
 				error 400, "Start date is greater than end date - swap them first "
 			else
