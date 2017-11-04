@@ -63,7 +63,7 @@ module API
 end
 
 ## Below is a commented out way to get stop the application and open a command line tool called pry right in the application environment
-binding.pry
+#binding.pry
 
 # packing it all up into a single object
 RatAppServer = Rack::Builder.new {

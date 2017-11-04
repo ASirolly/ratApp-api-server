@@ -53,7 +53,6 @@ module API
 			get :frequency do
 				start_date = Date.strptime(params[:start_date], "%d/%m/%y")
 			  end_date = Date.strptime(params[:end_date], "%d/%m/%y")
-				puts "start: #{start_date.day} #{start_date.month} #{start_date.year}"
 				aggregation = Queries::frequency_between_dates(start_date, end_date)
 				sightings_per_month = RatSighting.collection.aggregate(aggregation).to_a
 				return {data: sightings_per_month}.to_json
