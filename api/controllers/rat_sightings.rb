@@ -1,21 +1,21 @@
 require 'date'
 require "active_support/core_ext/integer/time"
+require 'json'
 
 module API
 	class RatSightingsController < Grape::API
-
 		resources :rat_sightings do
 			desc "Gets the {page}th set of {length} number of rat sightings"
 			params do
-				use page: 1, per_page: 25
+				optional :page, default: 1 
+				optional :per_page, default: 25
 			end
 			get do
-				params[:page] ||= 1
-				params[:per_page] ||= 25
 				@rat_sightings = RatSighting.paginate(:page => params[:page].to_i,
 															:per_page => params[:per_page].to_i).desc(:_id)
 				@rat_sightings.as_json
 			end
+
 
 
 			desc "Creates a new Rat Sighting"
@@ -43,28 +43,40 @@ module API
 					error!("Error Saving Sighting - make sure the parameters are correct", 422)
 				end
 			end
+
+
+			desc "Get sighting frequency per month between two dates"
+			params do
+				optional :start_date, default: (Date.today - 365).strftime("%d/%m/%y")
+				optional :end_date, default: Date.today.strftime("%d/%m/%y")
+			end
+			get :frequency do
+				start_date = Date.strptime(params[:start_date], "%d/%m/%y")
+			  end_date = Date.strptime(params[:end_date], "%d/%m/%y")
+				puts "start: #{start_date.day} #{start_date.month} #{start_date.year}"
+				aggregation = Queries::frequency_between_dates(start_date, end_date)
+				sightings_per_month = RatSighting.collection.aggregate(aggregation).to_a
+				return {data: sightings_per_month}.to_json
+			end
 		end
 
-		resources :rat_sightings_by_date do
-			desc "Gets rat sightings between two date ranges"
-			params do
-				use limit: 25
-			end
 
-			get do
-				params[:limit] ||= 25
-
-				params[:start_date] = params[:start_date] ? Date.parse(params[:start_date], '%d/%m/%Y') : Date.today - 7.days
-				params[:end_date] = params[:end_date] ? Date.parse(params[:end_date], '%d/%m/%Y') : Date.today + 1.days
-
-				if (params[:start_date] > params[:end_date])
-					error 400, "Don't let your start date be after your end_date dummy - no records will ever get returned"
-				else
-					@rat_sightings = RatSighting.where(:created_at.gt => params[:start_date].to_datetime).where(
-						:created_at.lte => params[:end_date].to_datetime).limit(params[:limit])
-
-					@rat_sightings.as_json
-				end
+		desc "Gets rat sightings between two date ranges"
+		params do
+			optional :limit, default: 25
+			# Default date range is past 30 days
+			optional :start_date, default: (Date.today - 30).strftime
+			optional :end_date, default: Date.today.strftime
+		end
+		get :rat_sightings_by_date do
+			limit			 = params[:limit]
+			start_date = Date.strptime(params[:start_date], "%d/%m/%y").to_datetime
+			end_date	 = Date.strptime(params[:end_date], "%d/%m/%y").to_datetime
+			if (params[:start_date] > params[:end_date])
+				error 400, "Start date is greater than end date - swap them first "
+			else
+				@sightings = RatSighting.between_dates(start_date, end_date).limit(limit)
+				@sightings.as_json
 			end
 		end
 	end

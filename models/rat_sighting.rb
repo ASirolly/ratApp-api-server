@@ -11,15 +11,17 @@ class RatSighting
 
 	# Scoping and indexing
 	scope :ordered, -> {order('created_at DESC')}
+	scope :between_dates, ->(start_date, end_date){before(end_date).after(start_date)}
+	scope :before, -> (date){where(:created_at.lte => date)}
+	scope :after, -> (date){where(:created_at.gte => date)}
 
-	def as_json(options = nil)
-		options ||= {}
+	def as_json(options = {})
 		loc_options = { :include => [:borough, :city], without:  [:city_id, :borough_id, :rat_sighting_id]}
 
 		defaults = {without: :location_id, :include =>
 																		 { :location => loc_options}}
+
 		options = options.merge(defaults) unless options.include?(:truncated)
-		puts options
 		super(options)
 	end
 

@@ -122,6 +122,16 @@ They should be in  a flat structure:
 	zip: 
 }
 ```
+
+- Getting frequencies of sightings per month
+GET request to `localhost:9292/api/rat_sightings/frequency`
+
+optional parameters:
+		`start_date` = One year ago
+		`end_date` = today
+
+returns a list of the months betweeen the two dates and how many sightings occured then.
+
 ## Locations
 - Get Locations
 Get request `localhost:9292/api/locations`
