@@ -72,7 +72,7 @@ module API
 			limit			 = params[:limit]
 			start_date = Date.strptime(params[:start_date], "%d/%m/%Y").to_datetime
 			end_date	 = Date.strptime(params[:end_date], "%d/%m/%Y").to_datetime
-			if (params[:start_date] > params[:end_date])
+			if (start_date > end_date)
 				error 400, "Start date is greater than end date - swap them first "
 			else
 				@sightings = RatSighting.between_dates(start_date, end_date).limit(limit)
