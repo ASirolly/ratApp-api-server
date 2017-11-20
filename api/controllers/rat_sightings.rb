@@ -56,7 +56,7 @@ module API
 				puts "start: #{start_date.strftime("%m %d, %y")}, end: #{end_date.strftime("%m %d, %y")}"
 				aggregation = Queries::frequency_between_dates(start_date, end_date)
 				sightings_per_month = RatSighting.collection.aggregate(aggregation).to_a
-				return {data: sightings_per_month}.as_json
+				return {data: sightings_per_month}
 			end
 		end
 

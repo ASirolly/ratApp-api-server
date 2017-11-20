@@ -18,8 +18,9 @@ class User
 
 	has_many :rat_sighting, validate: false
 	has_one :token
+	validates :email, presence: true, uniqueness: true
 	validates_confirmation_of :password
-	validates :password, presence: true
+	validates :password, presence: true, length: {minimum: 6}
 
 	class << self # Class methods
 		def find_by_email(email)
@@ -42,7 +43,6 @@ class User
 
 	protected
 	def encrypt_password
-		puts "Happening"
 		self.salt = BCrypt::Engine.generate_salt
 		self.password_digest = BCrypt::Engine.hash_secret(password, salt)
 	end
