@@ -25,12 +25,16 @@ module API
 		end
 
 		post :login do
+            user = User.find_by(email: params[:email])
 			token = User.authenticate(params[:email], params[:password])
-			unless token.nil?
+            if (!user.nil? && user.brute_force_detected?) 
+                error!('brute forcing password detected, timeout has incurred', 401)
+            end
+            unless token.nil?
 				{ auth_token: token }
 			else
-				halt 401
-			end
+				error!('invalid login attempt', 401)
+            end
 		end
 		
 		# Cleans up parameter list that we will end up reusing
